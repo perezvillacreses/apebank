@@ -233,16 +233,20 @@ section{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    padding: 0px 20px;
+    background-color: tomato;
     display: flex;
     flex-direction: row;
     align-items: center;
+    text-align: center;
     justify-content: space-between;
     z-index: 0;
     font-size: 106px;
 }
 .slogan-item{
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
+    padding-left: 20px;  
 }
 .slogan-title{
     font-size: 300px;
