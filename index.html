@@ -8,26 +8,56 @@
     <title>ApeBank</title>
 </head>
 <body>
-    <div class="bg">
-        <div class="apelogo apelogo-img"></div>
-        <div class="apelogo coin coin-one"></div>
-        <div class="apelogo coin coin-two"></div>
-        <div class="apelogo coin coin-three"></div>
-        <div class="apelogo coin coin-four"></div>
-        <div class="apelogo coin coin-five"></div>
-        <div class="apelogo coin coin-six"></div>
+    <div id="particles-js">
+    </div>
+    <!-- count particles -->
+    <div class="count-particles">
+        <span class="js-count-particles">--</span> particles
     </div>
     <header>
         <nav>
             <div class="logo">
-                <img src="./assets/img/logo-apebank.png" height="40px" alt="ApenBank Logo"></img>
-                <div>ApeBank</div>
+                <img src="./assets/svg/logoApebank.svg" height="60px" alt="ApenBank Logo"></img>
             </div>
+            
         </nav>
     </header>
     <main>
+        <div class="social-media-icons">
+            <a href="#"><img src="./assets/svg/twitter.svg" height="30px"></img></a>
+            <a href="#"><img src="./assets/svg/telegram.svg" height="30px"></img></a>
+        </div>
+        <section class="first">
+            <div class="slogan-container">
+                <div class="slogan-item">
+                    <div class="slogan-title">APE</div>
+                    <div class="slogan-subtitle">TOGETHER</div>
+                </div>
+                <div class="slogan-item">
+                    <div class="slogan-title">APE</div>
+                    <div class="slogan-subtitle">STRONGER</div>
+                </div>
+            </div>
+            <div class="scroll-down"><div class="scroll-down-button"></div></div>
+        </section>
+        <section id="mission">
+        </section>
+        <section></section>
+        <section></section>
         <section></section>
         <section></section>
     </main>
+    <canvas class="webgl"></canvas>
+    <div id="scrollProgress" class="fixed-alert"></div>    
+    <!-- scripts -->
+    <script type="importmap">
+		{
+			"imports": {
+				"three": "./build/three.module.js"
+			}
+		}
+	</script>
+    <script src="./assets/js/scene.js" type="module"></script>
+    
 </body>
 </html>

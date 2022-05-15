@@ -1,13 +1,46 @@
+*{
+    z-index: 1;
+}
 html{
     scroll-behavior: smooth;   
 }
+.webgl{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    max-width: 100%;
+    max-height: 100%;
+    outline: none;
+    overflow: hidden;
+    z-index: 0;
+}
+.fixed-alert{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+    color: white;
+    z-index: 2;
+}
+@font-face {
+    font-family: apebankfont;
+    src: url('../font/FORCED_SQUARE.ttf');
+}
 body{
     background-image: url('../img/background.png');
+    background-repeat: repeat-y;
+    background-attachment: fixed;
+    font-family: apebankfont;
+    color: white;
+    padding: 0px;
+    margin: 0px;
 }
 .bg{
     position: fixed;
     height: 100%;
     width: 100%;
+    pointer-events: none;
+    z-index: 0;
 }
 .apelogo{
     position: absolute;
@@ -72,13 +105,202 @@ body{
     0%{opacity: 0;}
     100%{opacity: 100;}
 }
-section{
-    height: 100vh;
-    width: 100%;
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px;
+    position: fixed;
+    width: 94%;
 }
 .logo{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+.main-menu{
+    padding-top: 60px;
+}
+a{
+    color: gray;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    padding: 10px;
+    margin: 10px;
+    transition: 0.6s;
+}
+a:hover{
+    transition: 0.6s;
     color: white;
 }
+a::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ababab;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+a:hover:after{
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.button{    
+    border: 1px solid white;
+    padding: 10px 20px;
+    height: 20px;
+    font-size: 16px;
+}
+.social-media-icons{
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    right: 50px;
+    bottom: 50px;    
+    width: 130px;
+    height: 40px;
+}
+.side-menu{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 50px;
+    top: 50%;
+    width: 100px;
+    height: 130px;
+    justify-content: center;
+    border-right: 2px solid white;
+    transform: translateY(-50%);    
+}
+.scroll-down{
+    height: 40px;
+    width: 20px;
+    border: 2px solid white;
+    border-radius: 15px;
+    display: flex;
+    padding-top: 2px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+@keyframes scroll-down-button-animation{
+    0%{top: 2px;}
+    100%{top: 6px;}
+}
+.scroll-down-button{
+    position: relative;
+    top: 6px;
+    height: 8px;
+    width: 4px;
+    background-color: white;
+    border-radius: 2px;
+    animation: scroll-down-button-animation 0.6s ease 0s infinite forwards alternate;
+}
+h2{
+    font-size: 8rem;
+    margin: 0px;
+    
+}
+section{
+    margin: auto;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    justify-content: center;
+}
+.first{
+    justify-content: end;
+    align-items: center;
+    
+}
+.info{
+    width: 50%;
+    color: #ababab;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+.slogan-container{
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 0;
+    font-size: 106px;
+}
+.slogan-item{
+    display: flex;
+    flex-direction: column;    
+}
+.slogan-title{
+    font-size: 300px;
+    height: 210px;
+    padding: 0px;
+    margin: 0px;
+}
+.slogan-together{
+    text-align: start;
+}
+.slogan-stronger{
+    text-align: end;
+}
+.slogan-subtitle{
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
+#particles-js{
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    position: fixed;
+  }
+  /* ---- stats.js ---- */
+
+.count-particles{
+    background: #000022;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 80px;
+    color: #13E8E9;
+    font-size: .8em;
+    text-align: left;
+    text-indent: 4px;
+    line-height: 14px;
+    padding-bottom: 2px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: bold;
+  }
+  
+  .js-count-particles{
+    font-size: 1.1em;
+    z-index: 2;
+  }
+  
+  #stats,
+  .count-particles{
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+  
+  #stats{
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+  }
+  
+  .count-particles{
+    border-radius: 0 0 3px 3px;
+  }
