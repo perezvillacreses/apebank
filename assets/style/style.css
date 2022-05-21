@@ -1,6 +1,48 @@
 *{
-    z-index: 1;
+    z-index: 3;
 }
+/*Custom_cursor*/
+.cursor{
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    border: 4px solid #2c2c2c;
+    border-radius: 50%;
+    z-index: 10;
+    transition: 200ms ease-out;
+    overflow: hidden;
+  }
+  .pointed{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #E400FF;
+    border-radius: 50%;
+    z-index: 10;
+    overflow: hidden;
+  }
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #000000;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #E400FF; 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1d080a; 
+    cursor: grab;
+  }
 html{
     scroll-behavior: smooth;   
 }
@@ -12,12 +54,12 @@ html{
     max-height: 100%;
     outline: none;
     overflow: hidden;
-    z-index: 0;
+    z-index: 2;
 }
 .fixed-alert{
     position: fixed;
-    bottom: 10px;
-    right: 10px;
+    bottom: 200px;
+    right: 100px;
     z-index: 10;
     color: white;
     z-index: 2;
@@ -27,6 +69,7 @@ html{
     src: url('../font/FORCED_SQUARE.ttf');
 }
 body{
+    background-color: black;
     background-image: url('../img/background.png');
     background-repeat: repeat-y;
     background-attachment: fixed;
@@ -34,13 +77,32 @@ body{
     color: white;
     padding: 0px;
     margin: 0px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.bg-explosion{
+    background-image: url('../img/explosion.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    transition: 0.5s;
+    filter: brightness(100%);
+    opacity: 0%;
+}
+.bg-explosion-fade{
+    transition: 0.5s;
+    opacity: 0%;
 }
 .bg{
     position: fixed;
     height: 100%;
     width: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
 }
 .apelogo{
     position: absolute;
@@ -115,9 +177,15 @@ nav{
     width: 94%;
 }
 .logo{
+    opacity: 0%;
     display: flex;
     flex-direction: row;
     align-items: center;
+    animation: logofadeanimation 1.5s ease 3s 1 forwards ;
+}
+@keyframes logofadeanimation{
+    0%{opacity: 0%;}
+    100%{opacity: 100%;}
 }
 .main-menu{
     padding-top: 60px;
@@ -127,9 +195,10 @@ a{
     display: inline-block;
     position: relative;
     text-decoration: none;
-    padding: 10px;
-    margin: 10px;
+    padding: 10px 10px;
+    margin: 4px;
     transition: 0.6s;
+    font-size: 32px;
 }
 a:hover{
     transition: 0.6s;
@@ -151,7 +220,67 @@ a:hover:after{
     transform: scaleX(1);
     transform-origin: bottom left;
 }
-
+ul{
+    list-style: none;
+}
+.side-menu{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0px;
+    top: 50%;
+    width: 200px;
+    height: 140px;
+    justify-content: center;
+    transform: translateY(-50%);
+    opacity: 10%;
+    transition: 0.6s ease;
+}
+.side-menu:hover{
+    transition: 0.6s ease;
+    opacity: 100%;
+}
+.side-menu ul{
+    padding-left: 30px;
+    position: relative;
+}
+.side-menu ul::after{
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 140px;
+    background-color: white;
+    top: 20px;
+    left: 8px;
+}
+.side-menu ul li{
+    padding: 10px 0px;
+    padding-left: 0px;
+}
+.side-menu ul li a{
+    position: relative;  
+    transition: 0.6s easy;
+    font-size: 14px;
+}
+.side-menu ul li a::before{
+    content: "";
+    position: absolute;
+    background: black;
+    width: 18px;
+    height: 18px;
+    left: -36px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50px;
+    border: 2px solid white;
+}
+.side-menu ul li a.active{
+    color: white;
+    transition: 0.6s easy;
+}
+.side-menu ul li a.active::before{
+    background: white;
+}
 .button{    
     border: 1px solid white;
     padding: 10px 20px;
@@ -159,25 +288,32 @@ a:hover:after{
     font-size: 16px;
 }
 .social-media-icons{
+    opacity: 0%;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: start;
     position: fixed;
     right: 50px;
     bottom: 50px;    
-    width: 130px;
-    height: 40px;
+    width: 240px;
+    height: 80px;
+    transition: 4s;
 }
-.side-menu{
-    display: flex;
-    flex-direction: column;
+.icons-size{
+    height: 30px;
+}
+.navigation-scroll{
+    height: 200px;
+    width: 12px;
     position: fixed;
-    right: 50px;
     top: 50%;
-    width: 100px;
-    height: 130px;
-    justify-content: center;
-    border-right: 2px solid white;
-    transform: translateY(-50%);    
+    left: 60px;
+    display: flex;
+    opacity: 0%;
+    transform: translateY(-50%);
+    transition: 2s;
+    z-index: 4;
 }
 .scroll-down{
     height: 40px;
@@ -185,10 +321,15 @@ a:hover:after{
     border: 2px solid white;
     border-radius: 15px;
     display: flex;
-    padding-top: 2px;
+    padding: 2px 0px 0px 2px;
     align-items: flex-start;
-    justify-content: center;
-    margin-bottom: 40px;
+    justify-content: start;
+}
+.mouseclick{
+    height: 12px;
+    width: 8px;
+    background-color: white;
+    border-radius: 15px 0px 0px 0px;
 }
 @keyframes scroll-down-button-animation{
     0%{top: 2px;}
@@ -205,48 +346,100 @@ a:hover:after{
 }
 h2{
     font-size: 8rem;
-    margin: 0px;
-    
+    margin: 0px;    
 }
 section{
     margin: auto;
-    width: 100%;
+    width: 90%;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: flex-start; 
     justify-content: center;
+    padding-left: 200px;
+}
+.section-content{
+    padding: 200px;
 }
 .first{
     justify-content: end;
     align-items: center;
-    
+    padding: 0px;    
+}
+.unlock{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    height: 110px;
+    padding: 20px 40px;
+    height: 90%;
+    width: 100%;
+    transition: 0.5s;
+    z-index: 10;
+    text-align: center;
+    font-size: 22px;
+    opacity: 0%;
+    animation: unlockFadeAnimation 1.5s ease 5s infinite alternate ;
+}
+@keyframes unlockFadeAnimation {
+    0%{opacity: 0%;}
+    100%{opacity: 100%;}
 }
 .info{
-    width: 50%;
     color: #ababab;
     font-size: 18px;
     letter-spacing: 2px;
+    max-width: 560px;
+    text-align: left;
 }
 .slogan-container{
-    width: 100%;
+    opacity: 0%;
+    width: 96%;
+    height: 400px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    padding: 0px 20px;
-    background-color: tomato;
+    padding-left: 34px;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: 2s;
+    animation: logofadeanimation 1.5s ease 3s 1 forwards;
+    cursor: default;
+}
+@keyframes slogancontaineranimation{
+    0%{opacity: 100%;}
+    100%{opacity: 0%;}
+}
+.slogan-container-footer{
+    width: 96%;
+    padding: 0px 20px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     text-align: center;
     justify-content: space-between;
     z-index: 0;
-    font-size: 106px;
+    overflow: hidden;
+    opacity: 0;
+    transition: 1s;
+    z-index: 3;
+}
+.slogan-fade{
+    opacity: 1;
+    transition: 2s;
 }
 .slogan-item{
     display: flex;
     flex-direction: column;
-    padding-left: 20px;  
+    margin: 200px;  
 }
 .slogan-title{
     font-size: 300px;
@@ -261,14 +454,18 @@ section{
     text-align: end;
 }
 .slogan-subtitle{
-    text-align: center;
+    text-align: start;
     padding: 0px;
+    margin: 0px;
+    font-size: 109px;
+}
+.ape-lovers{
     margin: 0px;
 }
 #particles-js{
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: 1;
     position: fixed;
   }
   /* ---- stats.js ---- */
@@ -307,4 +504,21 @@ section{
   
   .count-particles{
     border-radius: 0 0 3px 3px;
+  }
+  @media only screen and (max-width: 1200px) {}
+  @media only screen and (max-width: 768px) {}
+  @media only screen and (max-width: 400px) {
+      nav{
+          padding: 40px 0px;
+      }
+      .slogan-container{
+          font-size: 32px;
+      }
+      .slogan-title{
+          font-size: 80px;
+          height: 60px;
+      }
+      .social-media-icons{
+          bottom: 100px;
+      }
   }

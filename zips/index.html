@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <title>ApeBank</title>
+</head>
+<body>
+    <div id="particles-js">
+    </div>
+    <!-- count particles -->
+    <div class="count-particles">
+        <span class="js-count-particles">--</span> particles
+    </div>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/svg/logoApebank.svg" height="40px" alt="ApenBank Logo"></img>
+            </div>
+            <div class="main-menu">
+                <a href="#mission">MISSION/GENERAL INFO</a>
+                <a href="#">TOKENNOMICS/TAXES</a>
+                <a href="#">ROADMAP</a>
+            </div>
+            <a class="button" href="#">connect to wallet</a>
+        </nav>
+    </header>
+    <main>
+        <div class="social-media-icons">
+            <a href="#"><img src="./assets/svg/twitter.svg" height="30px"></img></a>
+            <a href="#"><img src="./assets/svg/discord.svg" height="30px"></img></a>
+            <a href="#"><img src="./assets/svg/telegram.svg" height="30px"></img></a>
+        </div>
+        <div class="side-menu">
+            <a href="#">TERMS</a>
+            <a href="#">PRIVACY</a>
+            <a href="#">SUPPORT</a>
+        </div>
+        <section class="first">
+            <p>MADE BY <img src="./assets/img/ape-emoji.png" height="20px"></img> LOVERS, FOR THE PEOPLE</p>
+            <div class="scroll-down"><div class="scroll-down-button"></div></div>
+        </section>
+        <section id="mission">
+            <h2>MISSION/ <BR> GENERAL INFO</h2>
+                <p class="info">
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries
+                </p>
+        </section>
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+    </main>
+    <canvas class="webgl"></canvas>
+    <div id="scrollProgress" class="fixed-alert"></div>    
+    <!-- scripts -->
+    <script src="./assets/js/threejs-main-scene.js" type="module"></script>
+    <script src="./particles.js"></script><!--particles main-->
+    <script src="./assets/js/app.js"></script>
+
+    <!-- stats.js -->
+    <script src="./assets/js/lib/stats.js"></script>
+    <script>
+    var count_particles, stats, update;
+    stats = new Stats;
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+    document.body.appendChild(stats.domElement);
+    count_particles = document.querySelector('.js-count-particles');
+    update = function() {
+        stats.begin();
+        stats.end();
+        if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+        count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+        }
+        requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+    </script>
+</body>
+</html>

@@ -26,3 +26,16 @@ Particles
     };
     requestAnimationFrame(update);
     </script>
+
+
+    <div class="unlock" id="unlockelement">
+        <a href="#" onclick="unlock()" id="unlockbutton">
+            click to start the visual experience
+        </a>
+        <div class="scroll-down"><div class="mouseclick"></div></div>
+    </div> 
+
+    <p>MADE BY <img src="./assets/img/ape-emoji.png" height="20px"></img> LOVERS, FOR THE PEOPLE</p>
+
+    //mouse
+    <div class="scroll-down"><div class="mouseclick"></div></div>

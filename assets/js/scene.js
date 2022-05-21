@@ -10,6 +10,7 @@ import { BokehShader, BokehDepthShader } from '../../jsm/shaders/BokehShader2.js
 import { GUI } from '../../jsm/libs/lil-gui.module.min.js';
 //import { OrbitControls } from '../jsm/controls/OrbitControls.js';
 import Stats from '../../jsm/libs/stats.module.js';
+//import { MathUtils } from 'three';
 //import * as BufferGeometryUtils from '../../jsm/utils/BufferGeometryUtils.js';
 
 
@@ -24,6 +25,37 @@ const Method = {
 	MERGED: 'MERGED',
 	NAIVE: 'NAIVE'
 };
+//bloom params
+let params = {
+	exposure: 1,
+	bloomThreshold: 0,
+	bloomStrength: 0.3, //1.2		
+	bloomRadius: 0.5
+};
+// raycaster
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2( 1, 1 );
+document.addEventListener( 'mousemove', onPointerMove );
+//unlock
+var lock = Boolean(false);
+	 //Array Textures
+	 let coinMaterial;
+	 let arr =[
+		'./assets/3d/NormalMapHands.jpg',
+		'./assets/3d/NormalMap2.png',
+		'./assets/3d/NormalMap3.png',
+		'./assets/3d/NormalMap4.png'
+	]
+	let textureToShow = 0;
+	let arrtextureLoader = new THREE.TextureLoader();
+	
+	arrtextureLoader.load(arr[textureToShow], function(tex){
+		arrtextureLoader.flipY = false
+		coinMaterial.normalMap = tex;
+		textureToShow++;
+	});
+
+
 const randomizeMatrix = function () {
 
 	const position = new THREE.Vector3();
@@ -74,7 +106,7 @@ textureEquirec = textureLoader.load( './assets/3d/hdri.jpg', function(texture){
 
 stats = new Stats();
 stats.showPanel( 0 );
-//document.body.appendChild( stats.dom );
+document.body.appendChild( stats.dom );
 
 //3D models
 const loader = new GLTFLoader().setPath('./assets/3d/');
@@ -84,7 +116,7 @@ function init( texture ){
 	
 	//camera
 	camera = new THREE.PerspectiveCamera( 28, window.innerWidth / window.innerHeight, 0.1, 40 );
-	camera.position.set(0, 0, 5);
+	camera.position.set(0, 0, 10);
 	camera.lookAt( 0, 0, 0.2 );
 
 	const cameraFolder = gui.addFolder('Camera')
@@ -108,6 +140,7 @@ function init( texture ){
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.outputEncoding = THREE.sRGBEncoding;
 	renderer.powerPreference = "low-power";
+	
 	document.body.appendChild( renderer.domElement );
 
 
@@ -123,21 +156,20 @@ function init( texture ){
 
 	///postprocess
 	var width = window.innerWidth || 1;
-var height = window.innerHeight || 1;
-	var parameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBAFormat, stencilBuffer: false };
-	var renderTarget = new THREE.WebGLRenderTarget( width, height, parameters );
-
-	const params = {
-		exposure: 1,
-		bloomThreshold: 0,
-		bloomStrength: 1.2,		
-		bloomRadius: 0.5
+	var height = window.innerHeight || 1;
+	var parameters = { 
+		minFilter: THREE.LinearFilter, 
+		magFilter: THREE.LinearFilter, 
+		format: THREE.RGBAFormat, 
+		stencilBuffer: false 
 	};
+	var renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, parameters );
+	
 	const bloomPass = new UnrealBloomPass( 
 		new THREE.Vector2( window.innerWidth, window.innerHeight ), 
 		params.bloomStrength, 
-		params.bloomStrength, 
-		params.bloomRadius 
+		params.bloomRadius,
+		params.bloomThreshold
 	);
 	bloomPass.exposure = params.exposure
 	bloomPass.threshold = params.bloomThreshold;
@@ -145,58 +177,42 @@ var height = window.innerHeight || 1;
 	bloomPass.radius = params.bloomRadius;
 
 	gui.add( params, 'exposure', 0.1, 2 ).onChange( function ( value ) {
-
 		renderer.toneMappingExposure = Math.pow( value, 4.0 );
-
 	} );
-
 	gui.add( params, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
-
 		bloomPass.threshold = Number( value );
-
 	} );
-
 	gui.add( params, 'bloomStrength', 0.0, 3.0 ).onChange( function ( value ) {
-
 		bloomPass.strength = Number( value );
-
 	} );
-
 	gui.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
-
 		bloomPass.radius = Number( value );
-
 	} );
-
 	
 //gui.add( effectController, 'noise' ).onChange( matChanger );
 composer = new EffectComposer( renderer, renderTarget );
 renderPass = new RenderPass( scene, camera );
 composer.addPass( renderPass );
-/*	filmPass = new FilmPass(
-		0.35,   // noise intensity
-		0.025,  // scanline intensity
-		648,    // scanline count
-		false,  // grayscale
-	);*/
 	
 	filmPass = new FilmPass(
-		1,   // noise intensity
-		0.5,  // scanline intensity
-		540,    // scanline count
-		false,  // grayscale
+		1,   // noise intensity 0.35
+		0,  // scanline intensity 0.025
+		540,    // scanline count 648
+		false,  // grayscale false
 	);
 	filmPass.renderToScreen = true;
 	glitchPass = new GlitchPass(
 		5 //dt_size
 	);
+
+	
 	//composer.addPass( glitchPass );
 	composer.addPass(filmPass);
 	composer.addPass( bloomPass );
 	function resizeRendererToDisplaySize(renderer) {
-		const canvas = renderer.domElement;
-		const width = canvas.clientWidth;
-		const height = canvas.clientHeight;
+		//const canvas = renderer.domElement;
+		//const width = canvas.clientWidth;
+		//const height = canvas.clientHeight;
 		const needResize = canvas.width !== width || canvas.height !== height;
 		if (needResize) {
 		  renderer.setSize(width, height, false);
@@ -219,17 +235,19 @@ composer.addPass( renderPass );
 		// Update renderer
 		renderer.setSize(sizes.width, sizes.height);
 		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		composer.setSize( sizes.width, sizes.height );
+		
 	});
-
+	
 	// Normal textures coin
 	const text_coin_normal1 = new THREE.TextureLoader().load('./assets/3d/NormalMapHands.jpg',
 	 () => {
-		 text_coin_normal1.flipY = false;
+		 //text_coin_normal1.flipY = false;
 	 });
 
 	 const text_coin_normal2 = new THREE.TextureLoader().load('./assets/3d/NormalMap2.png',
 	 () => {
-		 text_coin_normal2.flipY = false;
+		 //text_coin_normal2.flipY = false;
 	 });
 	 const text_coin_ao2 = new THREE.TextureLoader().load('./assets/3d/AmbientOcclusionMap (2).png',
 	 () => {
@@ -244,16 +262,36 @@ composer.addPass( renderPass );
 	 () => {
 		 text_coin_normal3.flipY = false;
 	 });
+
+
+
+// Click interaction
+//var canvas = document.getElementsByTagName("canvas")[0];
+
+canvas.addEventListener("click", function() {
+	arrtextureLoader.load(arr[textureToShow], function(tex) {
+		// Once the texture has loaded
+		// Asign it to the material
+		coinMaterial.normalMap = tex;
+		// Update the next texture to show
+		textureToShow++;
+		// Have we got to the end of the textures array
+		if(textureToShow > arr.length-1) {
+		textureToShow = 0;
+		}
+ 	}); 
+});
+//setInterval(changeTexture(),1000)
 	 // material coin
-	const coinMaterial = new THREE.MeshStandardMaterial({
-		color: new THREE.Color(0x88C9FF),
-		normalMap: text_coin_normal2,
+	coinMaterial = new THREE.MeshStandardMaterial({
+		//color: new THREE.Color(0xB8F0FF),
+		normalMap: text_coin_normal1,
 		aoMap: text_coin_ao2,
-		emissiveMap: text_coin_emissive,
-		emissive: new THREE.Color(0xfb0000),
-		emissiveIntensity: 10,
+		//emissiveMap: text_coin_emissive,
+		//emissive: new THREE.Color(0xfb0000),
+		//emissiveIntensity: 10,
 		metalness: 1,
-		roughness: 0.15
+		roughness: 0.25
 	});
 	const minicoinMaterial = new THREE.MeshStandardMaterial({
 		color: new THREE.Color(0x88C9FF),
@@ -273,11 +311,10 @@ composer.addPass( renderPass );
 		//document.querySelector('.loader').classList.add('loader-fade');		
 		mainScene = gltf.scene
 		console.log(mainScene)
-		/*mainScene.traverse((o) => {
+		mainScene.traverse((o) => {
 			if (o.isMesh) o.material = coinMaterial;
-		  });*/
+		  });
 		//mainScene.castShadow = true;
-		
 		scene.add( mainScene );
 		createGUI(mainScene, gltf.animations)
 		
@@ -297,14 +334,15 @@ composer.addPass( renderPass );
 		//model = gltf.scene;
 		//document.querySelector('.loader').classList.add('loader-fade');		
 		backgroundCoins = gltfcoin.scene
-		backgroundCoins.traverse((o) => {
+		backgroundCoins.scale.set(1,1,1)
+		/*backgroundCoins.traverse((o) => {
 			if (o.isMesh) o.material = coinMaterial;
-		  });
+		  });*/
 		//mainScene.castShadow = true;
-		const geometry = new THREE.CylinderGeometry( 0.015, 0.015, 0.001, 8 );
-		makeInstanced(geometry)		
+		//const geometry = new THREE.CylinderGeometry( 0.015, 0.015, 0.001, 8 );
+		//makeInstanced(geometry)		
 		
-		//scene.add( myGroup );
+		scene.add( backgroundCoins );
 		
 		  //gui.add(options,'morph',0,1).onChange(morphChange);
 		
@@ -327,12 +365,6 @@ composer.addPass( renderPass );
 		}
 		mesh.instanceMatrix.setUsage( THREE.DynamicDrawUsage );
 		scene.add( mesh );
-		//
-		const geometryByteLength = getGeometryByteLength( geometry );
-		guiStatsEl.innerHTML = [
-			'<i>GPU draw calls</i>: 1',
-			'<i>GPU memory</i>: ' + formatBytes( api.count * 16 + geometryByteLength, 2 )
-		].join( '<br/>' );
 	}
 /////////////////////////////////////////////////////
 	//scene.add( ambientLight );
@@ -387,24 +419,41 @@ function onDocumentMouseMove(event){
 }
 const clock = new THREE.Clock();
 const tick = () =>{
-	targetX = mouseX * 0.001;
-	targetY = mouseY * 0.001;
-	const elapsedTime = clock.getElapsedTime();
-	mainScene.rotation.y = elapsedTime;
-	mainScene.rotation.y += 0.5 * (targetX - mainScene.rotation.y)
-	mainScene.rotation.x += 0.5 * (targetY - mainScene.rotation.x)
-	//mainScene.rotation.z += 0.001 * (targetX - mainScene.rotation.y)
+	
+	if(lock == true){
+		targetX = mouseX * 0.001;
+		targetY = mouseY * 0.001;
+		const elapsedTime = clock.getElapsedTime();
+		console.log(elapsedTime);
+		mainScene.rotation.y = (elapsedTime);
+		if(camera.position.z > 5){
+			camera.position.z -= 0.01
+		}
+		//mainScene.rotation.y += 0.5 * (targetX - mainScene.rotation.y)
+		mainScene.rotation.x += 0.1 * (targetY - mainScene.rotation.x)	
+		//mainScene.rotation.z = (elapsedTime * 0.1)
+		backgroundCoins.rotation.y = (elapsedTime * 0.1)
+		backgroundCoins.rotation.z = (elapsedTime * 0.04)
+		backgroundCoins.rotation.x = (elapsedTime * 0.075)
+		document.getElementById("unlockelement").style.display = "none";
+	}
+	else{
+		console.log('Bloqueado mi crack')
+	}
+	
 }
 const dummy = new THREE.Object3D();
-const amount = 8;
-const matrixSize = 1;
-const divisor = 4;
+let amount = 8;
+let matrixSize = 0.01; //1
+let divisor = 64; //4
+
 
 function minicoins(){	
 	if ( mesh ) {
 		const time = Date.now() * 0.001;
 		//mesh.rotation.x = Math.sin( time / 4 );
 		//mesh.rotation.y = Math.sin( time / 2 );
+		
 		mesh.rotation.x = ( time / 40 );
 		mesh.rotation.y = ( time / 20 );		
 		let i = 0;
@@ -417,25 +466,38 @@ function minicoins(){
 					dummy.rotation.z = dummy.rotation.y * 2;
 					dummy.updateMatrix();
 					mesh.setMatrixAt( i ++, dummy.matrix );
+					//mesh.rotation.set(45, 45, 45)
 				}
 			}
 		}
 		mesh.instanceMatrix.needsUpdate = true;
 	}
 }
-
+const ScaleFolder = gui.addFolder('Scale')
+//MatrixFolder.add(matrixSize.set, 'MatrixSize', 0, 0.5).step(0.01)
+//ScaleFolder.add(backgroundCoins.scale, 'x', 0, 1).step(0.01).onChange(animate)
+ScaleFolder.open()
+const pointer = new THREE.Vector2();
+let INTERSECTED;
 function animate() {	
+	navigation();
 	requestAnimationFrame(animate);
 	playScrollAnimations()
 	tick();
-	//render();
+	render();
 	minicoins();
 	composer.render();
-	stats.end();	
+	stats.end();
+}
+function onPointerMove( event ) {
+
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
 }
 
 function render(){
-	renderer.render(scene, camera);	
+	//renderer.render(scene, camera);
 }
 window.scrollTo({ top: 0, behavior: 'smooth' })
 
@@ -451,34 +513,32 @@ function scalePercent(start, end) {
 
 const animationScripts = []
 
-
+let coinScale0 = (0,0,0)
+let coinScale1 = (1,1,1)
 animationScripts.push({
     start: 0,
     end: 20,
     func: () => {
 		camera.lookAt(0,0,0)
-		//mainScene.position.x = lerp(0,3, scalePercent(0,20));
-		mainScene.position.z = lerp(0,1, scalePercent(0, 20));
+		//params.bloomStrength = lerp(0.1, 1.2, scalePercent(0,20));
+		//bloomPass.strength = lerp(0.01, 1.2, scalePercent(0,20));
 		mainScene.children[0.].morphTargetInfluences[0] = lerp(0,1, scalePercent(0, 20));
-		//expressionFolder.add( model.children[0].morphTargetInfluences, i, 0, 1, 0.01 ).name( expressions[ i ] );
-    },
-})
-animationScripts.push({
-    start: 20,
-    end: 40,
-    func: () => {
-		//mainScene.position.x = lerp(10,10, scalePercent(21,40));
-		//mainScene.position.z = lerp(-10,-10, scalePercent(21, 40));
-		
+		backgroundCoins.scale.x = lerp(0,1, scalePercent(0,20));
+		backgroundCoins.scale.y = lerp(0,1, scalePercent(0,20));
+		backgroundCoins.scale.z = lerp(0,1, scalePercent(0,20));
     },
 })
 
 animationScripts.push({
-    start: 40,
+    start: 20,
     end: 60,
     func: () => {
 		//mainScene.position.x = lerp(3,3, scalePercent(41, 60));
-		mainScene.position.z = lerp(1,1, scalePercent(41, 60));
+		//mainScene.position.z = lerp(1,1, scalePercent(41, 60));
+		mainScene.children[0.].morphTargetInfluences[0] = lerp(1,1, scalePercent(20, 60));
+		backgroundCoins.scale.x = lerp(1,1, scalePercent(20, 60));
+		backgroundCoins.scale.y = lerp(1,1, scalePercent(20, 60));
+		backgroundCoins.scale.z = lerp(1,1, scalePercent(20, 60));
     },
 })
 animationScripts.push({
@@ -486,15 +546,23 @@ animationScripts.push({
     end: 80,
     func: () => {
 		//mainScene.position.x = lerp(3,3, scalePercent(60, 80));
-		mainScene.position.z = lerp(1,1, scalePercent(60, 80));
+		//mainScene.position.z = lerp(1,1, scalePercent(60, 80));
+		mainScene.children[0.].morphTargetInfluences[0] = lerp(1,0, scalePercent(61, 80));
+		backgroundCoins.scale.x = lerp(1,0, scalePercent(60, 80));
+		backgroundCoins.scale.y = lerp(1,0, scalePercent(60, 80));
+		backgroundCoins.scale.z = lerp(1,0, scalePercent(60, 80));
     },
 })
 animationScripts.push({
-    start: 80,
+    start: 81,
     end: 101,
     func: () => {
 		//mainScene.position.x = lerp(3,3, scalePercent(80, 100));
-		mainScene.position.z = lerp(1,1, scalePercent(80, 100));
+		//mainScene.position.z = lerp(1,1, scalePercent(80, 100));
+		mainScene.children[0.].morphTargetInfluences[0] = lerp(0,0, scalePercent(80, 100));
+		backgroundCoins.scale.x = lerp(0,0, scalePercent(80, 100));
+		backgroundCoins.scale.y = lerp(0,0, scalePercent(80, 100));
+		backgroundCoins.scale.z = lerp(0,0, scalePercent(80, 100));
     },
 })
 
@@ -512,6 +580,27 @@ document.body.onscroll = () => {
     //calculate the current scroll progress as a percentage
     scrollPercent = (
 		(document.documentElement.scrollTop || document.body.scrollTop) / ((document.documentElement.scrollHeight || document.body.scrollHeight) - document.documentElement.clientHeight)	) * 100;
-	document.getElementById('scrollProgress').innerText =
-        'Scroll Progress : ' + scrollPercent.toFixed(2) + ' X rotation : ' + mainScene.rotation.x
+	/*document.getElementById('scrollProgress').innerText =
+        'Scroll Progress : ' + scrollPercent.toFixed(2);*/
 }
+function navigation(){
+	document.getElementById("unlockbutton").addEventListener('click', unlock);	
+}
+function unlock(){
+	setInterval(function() {
+		arrtextureLoader.load(arr[textureToShow], function(tex) {
+			// Once the texture has loaded
+			// Asign it to the material
+			coinMaterial.normalMap = tex;
+			// Update the next texture to show
+			textureToShow++;
+			// Have we got to the end of the textures array
+			if(textureToShow > arr.length-1) {
+			textureToShow = 0;
+			}
+		 }); 
+	},6000)
+	document.getElementById("stage").style.overflowY = 'scroll';
+	lock = !lock
+}
+
