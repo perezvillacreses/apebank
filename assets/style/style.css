@@ -44,7 +44,7 @@
     cursor: grab;
   }
 html{
-    scroll-behavior: smooth;   
+    scroll-behavior: smooth;
 }
 .webgl{
     position: fixed;
@@ -68,6 +68,10 @@ html{
     font-family: apebankfont;
     src: url('../font/FORCED_SQUARE.ttf');
 }
+@font-face {
+    font-family: square;
+    src: url('../font/Square.ttf');
+}
 body{
     background-color: black;
     background-image: url('../img/background.png');
@@ -81,7 +85,6 @@ body{
     overflow-y: hidden;
 }
 .bg-explosion{
-    background-image: url('../img/explosion.png');
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
@@ -98,23 +101,68 @@ body{
     opacity: 0%;
 }
 .bg{
-    position: fixed;
-    height: 100%;
-    width: 100%;
+    height: 375px;
+    width: 375px;
     pointer-events: none;
     z-index: 2;
+}
+.loader{
+    z-index: 11;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.loader-fade{
+    top: 0%;
+    animation-delay: 2s;
+    animation-name: loader-fade-animation;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+@keyframes loader-fade-animation {
+    0%{opacity: 100%; display: flex;}
+    90%{opacity: 0%; display: none; top: 0%;}
+    100%{opacity: 0%; display: none; top: -100vh;}
+}
+.loader-circle{
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
 }
 .apelogo{
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 30%;
     transform: translate(-50%, -50%);
     width: 360px;
     height: 316px;
 }
 .apelogo-img{
-    background-image: url('../img/logo-apebank.png');
+    background-image: url('../svg/isologoApebank.svg');
+    background-repeat: none;
     color: goldenrod;
+}
+.apelogo-img-shine{
+    background-image: url('../img/logo-apebank-shine.png');
+    background-repeat: no-repeat;
+    animation: shine-animation 1s ease-out 0.2s infinite alternate forwards;
+}
+@keyframes shine-animation{
+    0%{opacity: 0%;}
+    100%{opacity: 90%;}
 }
 .coin{
     opacity: 0;
@@ -181,6 +229,8 @@ nav{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+.logo-animation{
     animation: logofadeanimation 1.5s ease 3s 1 forwards ;
 }
 @keyframes logofadeanimation{
@@ -239,6 +289,7 @@ ul{
 .side-menu:hover{
     transition: 0.6s ease;
     opacity: 100%;
+    color: #E400FF;
 }
 .side-menu ul{
     padding-left: 30px;
@@ -247,7 +298,7 @@ ul{
 .side-menu ul::after{
     content: "";
     position: absolute;
-    width: 3px;
+    width: 1px;
     height: 140px;
     background-color: white;
     top: 20px;
@@ -272,11 +323,7 @@ ul{
     top: 50%;
     transform: translateY(-50%);
     border-radius: 50px;
-    border: 2px solid white;
-}
-.side-menu ul li a.active{
-    color: white;
-    transition: 0.6s easy;
+    border: 1px solid white;
 }
 .side-menu ul li a.active::before{
     background: white;
@@ -299,6 +346,7 @@ ul{
     width: 240px;
     height: 80px;
     transition: 4s;
+    z-index: 10;
 }
 .icons-size{
     height: 30px;
@@ -344,11 +392,17 @@ ul{
     border-radius: 2px;
     animation: scroll-down-button-animation 0.6s ease 0s infinite forwards alternate;
 }
-h2{
-    font-size: 8rem;
+h2{    
+    font-size: 120px;
     margin: 0px;    
 }
-section{
+h3{
+    font-size: 30px;
+    margin: 10px 0px 0px 0px;
+}
+section{   
+    position: sticky; 
+    top: 0px;
     margin: auto;
     width: 90%;
     height: 100vh;
@@ -357,14 +411,33 @@ section{
     align-items: flex-start; 
     justify-content: center;
     padding-left: 200px;
+    opacity: 0;
+}
+.section-products{
+    height: auto;
 }
 .section-content{
-    padding: 200px;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 .first{
     justify-content: end;
     align-items: center;
-    padding: 0px;    
+    padding: 0px;
+    opacity: 1;
+}
+
+button{
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    color: white;
+    font-family: apebankFont;
+    font-size: 22px;
+    cursor: pointer;
 }
 .unlock{
     position: absolute;
@@ -373,28 +446,45 @@ section{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: end;
-    height: 110px;
+    justify-content: space-between;
     padding: 20px 40px;
-    height: 90%;
-    width: 100%;
+    height: 94%;
+    width: 94%;
     transition: 0.5s;
     z-index: 10;
     text-align: center;
     font-size: 22px;
     opacity: 0%;
+}
+.unlock-animation{
     animation: unlockFadeAnimation 1.5s ease 5s infinite alternate ;
 }
 @keyframes unlockFadeAnimation {
     0%{opacity: 0%;}
     100%{opacity: 100%;}
 }
+.info-container{
+    background-color: #cb68d611;
+    padding: 40px;
+    border: 1px solid white;
+}
 .info{
-    color: #ababab;
-    font-size: 18px;
+    font-family: square;
+    color: white;
+    font-size: 16px;
     letter-spacing: 2px;
     max-width: 560px;
     text-align: left;
+    font-weight: lighter;
+    list-style: circle;
+}
+.info, h2, h3{
+    cursor: default;
+    color: none;
+}
+b{
+    color: #cb68d6;
+    text-shadow: 2px 2px black;
 }
 .slogan-container{
     opacity: 0%;
@@ -409,32 +499,35 @@ section{
     align-items: center;
     justify-content: center;
     z-index: 3;
-    overflow: hidden;
     transition: 2s;
-    animation: logofadeanimation 1.5s ease 3s 1 forwards;
     cursor: default;
+}
+.slogan-container-animation{
+    animation: logofadeanimation 1.5s ease 3s 1 forwards;
 }
 @keyframes slogancontaineranimation{
     0%{opacity: 100%;}
     100%{opacity: 0%;}
 }
 .slogan-container-footer{
-    width: 96%;
-    padding: 0px 20px;
+    width: 1200px;
+    padding-left:140px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
     justify-content: space-between;
-    z-index: 0;
+    text-align: center;
     overflow: hidden;
     opacity: 0;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
     transition: 1s;
-    z-index: 3;
+    z-index: 0;
 }
 .slogan-fade{
     opacity: 1;
-    transition: 2s;
+    transition: 4s;
 }
 .slogan-item{
     display: flex;
@@ -461,6 +554,7 @@ section{
 }
 .ape-lovers{
     margin: 0px;
+    text-align: center;
 }
 #particles-js{
     width: 100%;
@@ -505,10 +599,42 @@ section{
   .count-particles{
     border-radius: 0 0 3px 3px;
   }
+  .footer-title{
+      font-size: 200px;
+      transition: 0.5s;
+  }
+  footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    width: 100%;
+    opacity: 0;
+}
   @media only screen and (max-width: 1280px) {
-      .slogan-title{
+    section{
+        width: 100%;
+    }
+    
+    .first{
+        overflow-x: hidden;
+    }
+    .slogan-container{
+        padding-left: 20px;
+        padding-left: 0px;
+        justify-content: space-between;  
+        height: 400px;
+    }
+    .slogan-item{
+        width: 400px;
+        overflow-x: hidden;
+        margin: 0px;
+    }  
+    .slogan-title{
           font-size:220px;
-          height: 140px;
+          height: 156px;
       }
       .slogan-subtitle{
           font-size: 80px;
@@ -516,38 +642,110 @@ section{
       h2{
           font-size: 90px;
       }
+      
       .info{
-          max-width: 400px;
+          max-width: 580px;
+          font-size: 12px;
+      }      
+      .footer-title{          
+          width: 90%;
+          padding-left: 0px;
+          padding-right: 60px;
       }
   }
-  @media only screen and (max-width: 768px) {}
-  @media only screen and (max-width: 375px) {
+  @media only screen and (max-width: 768px) {
+    .side-menu{
+        top: 100%;
+
+    }
+    .slogan-item{
+        width: 220px;
+        overflow-x: hidden;
+    }
+    .slogan-title{
+        font-size: 120px;
+        height: 90px;
+    }
+    .slogan-subtitle{
+        font-size: 44px;
+    }
+    section{
+        padding-left: 0px;
+        align-items: center;
+    }
+    .slogan-container-footer{
+        width: 100%;
+        padding-left: 40px;
+    }
+    .footer-title{
+        font-size: 120px;
+    }
+  }
+  @media only screen and (max-width: 425px) {
+      .side-menu{
+          display: none;
+      }
       nav{
-          padding: 40px 0px;
+          padding: 10px 0px;
       }
       .slogan-container{
+          justify-content: space-between;
           font-size: 32px;
           overflow-x: hidden;
       }
+      .address{
+          font-size: 18px;
+          margin: 0px;
+      }
+      .slogan-item{
+        width: 180px;
+    }
       .slogan-title{
-          font-size: 80px;
+          font-size: 88px;
           height: 60px;
       }
       .slogan-subtitle{
           font-size: 32px;
       }
-      .social-media-icons{
-          bottom: 100px;
-      }
       section{
-          width: 300px;
-          padding-left: 0px;
+          max-width: 340px;
+          padding: 0px 10px;
       }
       .social-media-icons{
-          left: 60px;
-          padding-left: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 200px;
+          bottom: 0px;
+      }
+      .products-content{
+          height: 600px;
+          overflow-x: scroll;
+      }
+      .info{
+          padding: 4px;
+          background-color: rgba(0, 0, 0, 0.651);
+          font-size: 12px;
+          margin: 5px 0px;
+      }
+      .box{
+        height: 20px;
+      }
+      .info, h2, h3{
+          margin: 2px 0px;
+      }
+      h3{
+          margin-top: 6px;
       }
       h2{
           font-size: 42px;
+      }
+      .unlock{
+          width: 300px;
+      }
+      .slogan-container-footer{
+          width: 100%;
+      }
+      .footer-title{
+          font-size: 80px;
       }
   }

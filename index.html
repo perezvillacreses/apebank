@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="./assets/style/style.css">
     <title>ApeBank</title>
 </head>
 <body id="stage">
+    <div class="loader">
+        <div class="bg">
+            <div class="apelogo apelogo-img"></div>
+            <div class="apelogo apelogo-img-shine"></div>
+        </div>
+        <div class="loader-circle" id="load-percent">0%</div>
+    </div>
     <header>
         <nav>
             <div class="logo">
@@ -15,27 +26,25 @@
             </div>            
         </nav>
         <div class="navigation-scroll">
-            <svg fill="none" stroke="#ffffff" stroke-miterlimit="4" viewBox="4" preserveAspectRatio="xMaxYMax meet" x="0px" y="0px">
-                <line class="st0" x1="10" y1="0" x2="10" y2="300"/>
-            </svg>
             <div class="side-menu">
                 <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#tokenomics">Tokenomics</a></li>
-                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about" onclick="about()">About</a></li>
+                    <li><a href="#tokenomics" onclick="tokenomics()">Tokenomics</a></li>
+                    <li><a href="#products" onclick="products()">Products</a></li>
                 </ul>                
             </div>
         </div>
     </header>
-    <a class="unlock" id="unlockelement" onclick="unlock()" href="#">
+    <button class="unlock" id="unlockelement" onclick="unlock()">
+        <p></p>
         click anywhere to start the visual experience
-    </a>    
+    </button>    
     <main>
         <div class="bg-explosion"></div>
         <div class="social-media-icons">
-            <a href="#" class="icons-size"><img src="./assets/svg/twitter.svg" height="30px"></img></a>
-            <a href="#" class="icons-size"><img src="./assets/svg/telegram.svg" height="30px"></img></a>
-            <a href="#" class="icons-size"><img src="./assets/svg/gitbook.svg" height="40px"></img></a>
+            <a href="https://twitter.com/weareapebank" class="icons-size" target="_blank"><img src="./assets/svg/twitter.svg" height="30px"></img></a>
+            <a href="https://t.me/apebankpreverify" class="icons-size" target="_blank"><img src="./assets/svg/telegram.svg" height="30px"></img></a>
+            <a href="https://docs.ape-bank.xyz/" class="icons-size" target="_blank"><img src="./assets/svg/gitbook.svg" height="40px"></img></a>
         </div>
         <section class="first">
             <div class="slogan-container">
@@ -50,55 +59,82 @@
             </div>            
         </section>
         <section id="about">
-            <h2>About</h2>
+            <div class="section-content">
+                <h2>About</h2>
+                <p class="info">Ape Together. Ape Stronger.</p>
                 <p class="info">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    <b>$APEBANK</b> aims to close the gap between deep valued stored in <b>premiere NFTs & assets</b> and the wider audience, creating a truly <b>decentralized meta-metaverse.</b>
                 </p>
-        </section>
-        <section id="tokenomics">
-            <h2>Tokenomics</h2>
-            <p class="info">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-        </section>
-        <section id="products">
-            <h2>Products</h2>
-            <p class="info">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-        </section>
-        <section></section>
-        <section>
-            <div class="slogan-container-footer">
-                <img src="./assets/svg/logoapebankText.svg" width="70%" alt="ApenBank"></img>
-                <p class="ape-lovers">MADE BY APE LOVERS, FOR THE PEOPLE</p>
+                <p class="info">
+                    Branding and financial products perfectly merge. Events, derivatives, utilities, economic incentives, all backed by a <b>tax-funded, perpetually running Treasury,</b> ApeBank's core product.
+                </p>
+                <p class="info">
+                    A <b>part of the profits</b> gets rolled back to the most loyal holders; the rest goes to build what will represent one of <b>the fastest growing Crypto hedge funds,</b> acquiring both NFTs and valuable tokens.
+                </p>
+                <p class="info">
+                    ApeBank works also as an <b>investment bank,</b> through seed & strategic deals with the most promising projects.
+                </p>
+                <p class="info">
+                    The power of a sizeable, forever growing decentralized entity, <b>made for the people.</b> No VCs, no external pressures of any kind.
+                </p>
             </div>
         </section>
+        <section id="tokenomics">
+            <div class="section-content">
+                <h2>Tokenomics</h2>
+                <p class="info"> <b>Token Supply:</b> 100000</p>
+                <p class="info">No more minting possible</p>
+                <p class="info">Deflationary Supply through <b>vote-escrowing for Governance (soon)</b> </p>
+                <p class="info"><b>Contract address:</b></p>
+                <p class="address">0x405cffce3a08dcc0e909bb20fd4eb654dca948d8</p>
+                <p class="info">Transaction/Transfer Tax: <b>10%</b></p>
+                <p class="info">Early Sell/Transfer Tax: <b>20%</b></p>
+            </div>            
+        </section>
+        <section id="products" >
+            <div class="section-content">                
+                <h2>Products</h2>
+                <div class="products-content">
+                    <h3>ApeTreasury</h3>
+                <p class="info">
+                    ApeBank’s Treasury <b>acquires, manages and sells premiere NFTs</b> and assets. Strategic partnerships (E.g. whitelist spots with new, promising NFT projects) and insider deals allow for the best returns. Operations can both be suited for <b>short term profits</b> (E.g. quick NFT flips, or noticeable market opportunities for tokens acquisitions) or for a <b>long term view</b> (E.g. Protocol2protocol loans, Equity swaps)
+                </p>
+                <div class="box"></div>
+                <h3>ApeTogether</h3>
+                <p class="info">
+                    ApeTogether is a product that <b>allows users to effectively crowdpool their investments.</b> Isolated pools, guaranteed by locked ApeBank Tokens, may perform <b>specific mandates</b> (E.g. acquiring floor NFTs of a specific collection), or even a wider range of <b>operational freedom</b> (E.g. DEX trades, in a certain pool, performed by managers)
+                </p>
+                <div class="box"></div>
+                <h3>ApeRaffle</h3>
+                <p class="info">
+                    ApeRaffle is a product where users can mint an <b>NFT representing their ticket for a raffle,</b> where the winners can get <b>premiere NFTs as a prize,</b> paying for tickets just a fraction of the NFTs cost.
+                </p>
+                <div class="box"></div>
+                <h3>Project Mesa</h3>
+                <p class="info">
+                    Project Mesa is the <b>first and foremost Permissionless NFT Money Market.</b> No LTV, no liquidations, no ad hoc stablecoin minting. If there is money to be lent and there is somebody willing to use a NFT as collateral, then there is a market, <b>regardless if the NFT collection is a bluechip</b> or it has launched just a few hours ago.
+                </p>
+                </div>
+            </div>
+        </section>
+        <section></section>
+        <footer id="footer">
+            <div class="slogan-container-footer">
+                <div class="footer-title">
+                    APE
+                </div>                
+                <div class="footer-title">
+                    BANK
+                </div>     
+            </div>
+        </footer>
     </main>
     <canvas class="webgl"></canvas>
     <div id="scrollProgress" class="fixed-alert"></div>    
     <!-- scripts -->
     <script src="./assets/js/app.js"></script>    
     <script src="./assets/js/threejs-main-scene.js" type="module"></script>
-    <script>
-        let path = document.querySelector('line');
-        let pathLength = path.getTotalLength();
-        console.log(pathLength);
-
-        path.style.strokeDasharray = pathLength + ' ' + pathLength;
-
-        window.addEventListener('scroll', () => {
-        // What % down is it?
-        var scrollPercentage = (document.documentElement.scrollTop + document.body.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
-
-        // Length to offset the dashes
-        var drawLength = pathLength * scrollPercentage;
-
-        // Draw in reverse
-        path.style.strokeDashoffset = pathLength - drawLength;
-
-                });
-    </script>
+    
     
 </body>
 </html>
